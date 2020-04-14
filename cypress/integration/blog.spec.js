@@ -3,28 +3,41 @@ describe('Blog app', function() {
     cy.request('POST', 'http://localhost:3003/api/test/init')
   })
 
-  describe('Login', function() {
-
+  describe('When not logged in', function() {
     beforeEach(function() {
       cy.visit('http://localhost:3000')
     })
 
-    it('succeeds with correct credentials', function() {
-      cy.contains('Login')
-      cy.get('#username').type('root')
-      cy.get('#password').type('secret')
-      cy.contains('login').click()
-      cy.contains('Logged in as Superuser')
+    it('navigation bar is visible but content is not dispalyed', function() {
+      cy.contains('users').click()
+      cy.url().should('include', '/users')
+      cy.get('.root').should('not.contain', 'Users')
+      cy.contains('blogs').click()
+      cy.get('.root').should('not.contain', 'Blogs')
     })
 
-    it('fails with incorrect credentials and error iis displayed', function() {
-      cy.contains('Login')
-      cy.get('#username').type('testuser')
-      cy.get('#password').type('password')
-      cy.contains('login').click()
-      cy.get('.error').contains('invalid username or password')
+    describe('login', function() {
+
+      it('succeeds with correct credentials', function() {
+        cy.contains('Login')
+        cy.get('#username').type('root')
+        cy.get('#password').type('secret')
+        cy.contains('login').click()
+        cy.contains('Logged in as Superuser')
+      })
+
+      it('fails with incorrect credentials and error is displayed', function() {
+        cy.contains('Login')
+        cy.get('#username').type('testuser')
+        cy.get('#password').type('password')
+        cy.contains('login').click()
+        cy.get('.error').contains('invalid username or password')
+      })
     })
+
   })
+
+
 
   describe('When logged in', function() {
 
@@ -91,7 +104,7 @@ describe('Blog app', function() {
         cy.visit('http://localhost:3000/users')
       })
 
-      it.only('all users and number of blogs they have created are shown', function() {
+      it('all users and number of blogs they have created are shown', function() {
         cy.get('#user-list').find('tbody tr').should('have.length', 3)
         cy.get('#user-list').contains('Superuser').parent().find('td').eq(1).contains(3)
         cy.get('#user-list').contains('Test User').parent().find('td').eq(1).contains(3)
@@ -104,7 +117,5 @@ describe('Blog app', function() {
 
 
   })
-
-
 
 })
