@@ -106,9 +106,9 @@ describe('Blog app', function() {
 
       it('all users and number of blogs they have created are shown', function() {
         cy.get('#user-list').find('tbody tr').should('have.length', 3)
-        cy.get('#user-list').contains('Superuser').parent().find('td').eq(1).contains(3)
-        cy.get('#user-list').contains('Test User').parent().find('td').eq(1).contains(3)
-        cy.get('#user-list').contains('Login User').parent().find('td').eq(1).contains(0)
+        cy.get('#user-list').contains('Superuser').parent().siblings().contains(3)
+        cy.get('#user-list').contains('Test User').parent().siblings().contains(3)
+        cy.get('#user-list').contains('Login User').parent().siblings().contains(0)
 
 
       })
