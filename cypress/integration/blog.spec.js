@@ -109,8 +109,21 @@ describe('Blog app', function() {
         cy.get('#user-list').contains('Superuser').parent().siblings().contains(3)
         cy.get('#user-list').contains('Test User').parent().siblings().contains(3)
         cy.get('#user-list').contains('Login User').parent().siblings().contains(0)
+      })
 
+      it('clicking on a name shows blogs added by the user', function() {
+        cy.contains('Test User').click()
+        cy.get('h3').contains('Test User')
+        cy.get('#user-blog-list').find('.blog').should('have.length', 3)
+        cy.get('#user-blog-list').find('.blog').contains('Title 1')
+        cy.get('#user-blog-list').find('.blog').contains('Title 3')
+        cy.get('#user-blog-list').find('.blog').contains('Title 5')
+      })
 
+      it('if the user has not added blogs, message is dispalyed', function() {
+        cy.contains('Login User').click()
+        cy.get('h3').contains('Login User')
+        cy.contains('No blogs added')
       })
 
     })
